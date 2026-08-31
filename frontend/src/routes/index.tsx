@@ -23,13 +23,13 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Review Guardian — AI Summaries for Amazon Reviews" },
+      { title: "Review Guardian - AI Summaries for Amazon Reviews" },
       {
         name: "description",
         content:
           "Paste an Amazon ASIN to get an AI summary of the reviews, a rating breakdown, and fake-review detection.",
       },
-      { property: "og:title", content: "Review Guardian — AI Summaries for Amazon Reviews" },
+      { property: "og:title", content: "Review Guardian - AI Summaries for Amazon Reviews" },
       {
         property: "og:description",
         content:
@@ -85,7 +85,7 @@ function Index() {
                 <Sparkles className="size-3.5" /> AI review intelligence
               </span>
               <h1 className="mt-5 text-4xl leading-tight font-semibold md:text-5xl">
-                Know what buyers really think — before you buy
+                Know what buyers really think - before you buy
               </h1>
               <p className="mt-4 max-w-lg text-lg text-muted-foreground">
                 Review Guardian condenses thousands of Amazon reviews into one trustworthy summary
@@ -102,7 +102,7 @@ function Index() {
           <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
             <h2 className="text-3xl font-semibold">What we do</h2>
             <p className="mt-3 max-w-2xl text-muted-foreground">
-              Four services run on every listing you analyze — no settings, no configuration.
+              Four services run on every listing you analyze - no settings, no configuration.
             </p>
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {services.map((s) => (
@@ -147,7 +147,7 @@ function Index() {
               </p>
             ) : demos.length === 0 ? (
               <p className="mt-6 text-sm text-muted-foreground">
-                No analyzed products yet — run the trust pipeline
+                No analyzed products yet - run the trust pipeline
                 (<code className="font-mono">generate_summaries</code>) on the backend, then
                 refresh.
               </p>

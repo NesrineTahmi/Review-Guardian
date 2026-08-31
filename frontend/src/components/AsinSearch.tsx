@@ -24,7 +24,7 @@ export function AsinSearch({
     e.preventDefault();
     const value = asin.trim().toUpperCase();
     if (!isValidAsin(value)) {
-      setError("An ASIN is 10 characters, letters and digits — e.g. B08N5WRWNW.");
+      setError("An ASIN is 10 characters, letters and digits - e.g. B08N5WRWNW.");
       return;
     }
     setError(null);

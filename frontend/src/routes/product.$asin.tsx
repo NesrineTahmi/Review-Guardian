@@ -16,7 +16,7 @@ export const Route = createFileRoute("/product/$asin")({
   },
   head: ({ loaderData }) => {
     const name = loaderData?.product?.name;
-    const title = name ? `${name} — Review summary | Review Guardian` : "Product not found | Review Guardian";
+    const title = name ? `${name} - Review summary | Review Guardian` : "Product not found | Review Guardian";
     const description = name
       ? `AI summary, trusted rating and fake-review analysis for ${name}.`
       : "We could not find review data for this ASIN.";
@@ -117,7 +117,7 @@ function ProductDetail({ product, reviews }: { product: ApiProduct; reviews: Api
               </>
             ) : (
               <p className="text-sm text-muted-foreground">
-                This product hasn't been through the trust pipeline yet — no summary or adjusted
+                This product hasn't been through the trust pipeline yet - no summary or adjusted
                 rating available.
               </p>
             )}
