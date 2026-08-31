@@ -9,7 +9,7 @@ export function SiteHeader() {
           <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground">
             <Leaf className="size-5" />
           </span>
-          <span className="font-display text-lg font-semibold">Leafwise</span>
+          <span className="font-display text-lg font-semibold">Review Guardian</span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-muted-foreground">
           <a href="/#services" className="transition-colors hover:text-primary-deep">
@@ -31,8 +31,8 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border/70 bg-secondary/40">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>Leafwise — review intelligence for Amazon shoppers.</p>
-        <p>Demo data. Not affiliated with Amazon.</p>
+        <p>Review Guardian — review intelligence for Amazon shoppers.</p>
+        <p>Not affiliated with Amazon.</p>
       </div>
     </footer>
   );

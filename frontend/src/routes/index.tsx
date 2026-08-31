@@ -3,18 +3,33 @@ import { ShieldAlert, Sparkles, ScanSearch, ThumbsUp, ArrowRight } from "lucide-
 import { AsinSearch } from "@/components/AsinSearch";
 import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { StarRating } from "@/components/StarRating";
-import { listProducts } from "@/lib/reviews-data";
+import { fetchAllProducts, type ApiProduct } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
+  loader: async () => {
+    let products: ApiProduct[] = [];
+    let loadError = false;
+    try {
+      products = await fetchAllProducts();
+    } catch {
+      // Backend unreachable or misconfigured — show the page without the
+      // sample-listing section rather than crashing the whole route.
+      loadError = true;
+    }
+    // Only surface products that have actually been through the trust
+    // pipeline (generate_summaries) — the rest have nothing to show yet.
+    const analyzed = products.filter((p) => p.trust_report !== null);
+    return { demos: analyzed.slice(0, 4), loadError };
+  },
   head: () => ({
     meta: [
-      { title: "Leafwise — AI Summaries for Amazon Reviews" },
+      { title: "Review Guardian — AI Summaries for Amazon Reviews" },
       {
         name: "description",
         content:
           "Paste an Amazon ASIN to get an AI summary of the reviews, a rating breakdown, and fake-review detection.",
       },
-      { property: "og:title", content: "Leafwise — AI Summaries for Amazon Reviews" },
+      { property: "og:title", content: "Review Guardian — AI Summaries for Amazon Reviews" },
       {
         property: "og:description",
         content:
@@ -55,7 +70,8 @@ const steps = [
 ];
 
 function Index() {
-  const demos = listProducts();
+  const { demos, loadError } = Route.useLoaderData();
+  const sampleAsins = demos.map((p) => p.asin);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -72,11 +88,11 @@ function Index() {
                 Know what buyers really think — before you buy
               </h1>
               <p className="mt-4 max-w-lg text-lg text-muted-foreground">
-                Leafwise condenses thousands of Amazon reviews into one trustworthy summary and
-                flags the reviews that look paid for.
+                Review Guardian condenses thousands of Amazon reviews into one trustworthy summary
+                and flags the reviews that look paid for.
               </p>
               <div id="search" className="mt-8 max-w-xl scroll-mt-24">
-                <AsinSearch />
+                <AsinSearch sampleAsins={sampleAsins} />
               </div>
             </div>
           </div>
@@ -123,26 +139,43 @@ function Index() {
         <section className="border-t border-border/70 bg-card">
           <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
             <h2 className="text-3xl font-semibold">Try a sample listing</h2>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2">
-              {demos.map((p) => (
-                <Link
-                  key={p.asin}
-                  to="/product/$asin"
-                  params={{ asin: p.asin }}
-                  className="group rounded-2xl border border-border bg-background p-6 transition-shadow hover:shadow-soft"
-                >
-                  <p className="font-mono text-xs text-muted-foreground">{p.asin}</p>
-                  <h3 className="mt-2 text-lg font-semibold group-hover:text-primary-deep">{p.name}</h3>
-                  <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-                    <StarRating value={p.rating} />
-                    {p.rating} · {p.reviewCount.toLocaleString()} reviews
-                  </div>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-deep">
-                    View summary <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              ))}
-            </div>
+
+            {loadError ? (
+              <p className="mt-6 text-sm text-destructive">
+                Couldn't reach the API to load sample listings. Check that the backend is running
+                and that VITE_API_URL points to it.
+              </p>
+            ) : demos.length === 0 ? (
+              <p className="mt-6 text-sm text-muted-foreground">
+                No analyzed products yet — run the trust pipeline
+                (<code className="font-mono">generate_summaries</code>) on the backend, then
+                refresh.
+              </p>
+            ) : (
+              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                {demos.map((p) => (
+                  <Link
+                    key={p.asin}
+                    to="/product/$asin"
+                    params={{ asin: p.asin }}
+                    className="group rounded-2xl border border-border bg-background p-6 transition-shadow hover:shadow-soft"
+                  >
+                    <p className="font-mono text-xs text-muted-foreground">{p.asin}</p>
+                    <h3 className="mt-2 text-lg font-semibold group-hover:text-primary-deep">
+                      {p.name || p.asin}
+                    </h3>
+                    <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                      <StarRating value={p.trust_report!.adjusted_rating} />
+                      {p.trust_report!.adjusted_rating.toFixed(1)} ·{" "}
+                      {p.trust_report!.total_reviews.toLocaleString()} reviews
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-deep">
+                      View summary <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

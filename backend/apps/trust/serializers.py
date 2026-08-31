@@ -28,7 +28,8 @@ class ProductTrustReportSerializer(serializers.ModelSerializer):
         model = ProductTrustReport
         fields = [
             'total_reviews', 'fake_count', 'authenticity_rate',
-            'raw_avg_rating', 'adjusted_rating', 'pros', 'cons', 'verdict', 'computed_at',
+            'raw_avg_rating', 'adjusted_rating', 'summary_text',
+            'pros', 'cons', 'verdict', 'computed_at',
         ]
 
 

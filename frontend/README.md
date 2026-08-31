@@ -1,24 +1,20 @@
-# Review Whisperer
+# Review Guardian
 
-make a web app for an ai summarizer for amazon products' reviews , the landing page contains our services like the fact that we summarize reviews and we detect fake reviews and a search bar where we enter the asin code of the product to take us to the product with its review' summary, rating and the list of actual reviews , make athe design suited to the topic with a light green color with white
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a4175d09-f2fe-4332-a7be-64b62ce1b981).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Web app for AI-summarized Amazon product reviews. The landing page describes
+the service (review summarization + fake-review detection) and has a search
+bar to look up a product by its Amazon ASIN; the product page shows the
+AI summary, the trust-adjusted rating, and the full list of scored reviews.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js (or Bun) installed.
 
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
-npm i
-npm run dev
+bun install     # or: npm install
+bun run dev     # or: npm run dev
 ```
+
+Copy `.env.example` to `.env` and point `VITE_API_URL` at your running
+backend (see the `backend/` project) before starting the dev server.

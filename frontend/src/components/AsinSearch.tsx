@@ -3,10 +3,19 @@ import { useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { isValidAsin } from "@/lib/reviews-data";
+import { isValidAsin } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-export function AsinSearch({ className, size = "lg" }: { className?: string; size?: "lg" | "sm" }) {
+export function AsinSearch({
+  className,
+  size = "lg",
+  sampleAsins = [],
+}: {
+  className?: string;
+  size?: "lg" | "sm";
+  /** Real ASINs from the database to offer as one-click suggestions. */
+  sampleAsins?: string[];
+}) {
   const navigate = useNavigate();
   const [asin, setAsin] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -52,11 +61,25 @@ export function AsinSearch({ className, size = "lg" }: { className?: string; siz
       </div>
       {error ? (
         <p className="mt-2 pl-1 text-sm text-destructive">{error}</p>
+      ) : sampleAsins.length > 0 ? (
+        <p className="mt-2 pl-1 text-sm text-muted-foreground">
+          Try a product already in the database:{" "}
+          {sampleAsins.map((sample, i) => (
+            <span key={sample}>
+              <button
+                type="button"
+                onClick={() => setAsin(sample)}
+                className="font-medium text-primary-deep underline-offset-4 hover:underline"
+              >
+                {sample}
+              </button>
+              {i < sampleAsins.length - 1 ? ", " : "."}
+            </span>
+          ))}
+        </p>
       ) : (
         <p className="mt-2 pl-1 text-sm text-muted-foreground">
-          Try the demo products <button type="button" onClick={() => setAsin("B08N5WRWNW")} className="font-medium text-primary-deep underline-offset-4 hover:underline">B08N5WRWNW</button>
-          {" or "}
-          <button type="button" onClick={() => setAsin("B07FZ8S74R")} className="font-medium text-primary-deep underline-offset-4 hover:underline">B07FZ8S74R</button>.
+          Paste any 10-character ASIN present in the database.
         </p>
       )}
     </form>
